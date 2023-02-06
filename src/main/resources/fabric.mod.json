@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "xaerofix",
+  "version": "${version}",
+  "name": "Xaero's Minimap Fix",
+  "authors": [
+    "Abbie"
+  ],
+  "license": "MIT",
+  "environment": "client",
+  "mixins": [
+    "xaerofix.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.11",
+    "minecraft": ">=1.14.4"
+  },
+  "suggests": {
+    "xaerominimap": ">=20.15.2",
+    "xaerominimapfair": ">=20.15.2"
+  }
+}
