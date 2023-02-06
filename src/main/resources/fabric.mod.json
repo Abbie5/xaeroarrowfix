@@ -1,15 +1,19 @@
 {
   "schemaVersion": 1,
-  "id": "xaerofix",
+  "id": "xaeroarrowfix",
   "version": "${version}",
-  "name": "Xaero's Minimap Fix",
+  "name": "Xaero's Minimap Arrow Fix",
+  "description": "Fix Xaero's Minimap still showing the main entity dot when using the arrow",
   "authors": [
     "Abbie"
   ],
+  "contact": {
+    "sources": "https://github.com/Abbie5/xaeroarrowfix"
+  },
   "license": "MIT",
   "environment": "client",
   "mixins": [
-    "xaerofix.mixins.json"
+    "xaeroarrowfix.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.11",

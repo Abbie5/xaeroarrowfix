@@ -1,4 +1,4 @@
-package cc.abbie.xaerofix.mixin;
+package cc.abbie.xaeroarrowfix.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +22,7 @@ public abstract class MinimapRendererMixin {
             name = "crosshairDisplayed",
             at = @At(value = "LOAD", ordinal = 1)
     )
-    private boolean xaerofix$fixMainEntityDot(boolean original, XaeroMinimapSession minimapSession, PoseStack matrixStack, MinimapProcessor minimap, int x, int y, int width, int height, double scale, int size, float partial, CustomVertexConsumers cvc) {
+    private boolean xaeroarrowfix$fixMainEntityDot(boolean original, XaeroMinimapSession minimapSession, PoseStack matrixStack, MinimapProcessor minimap, int x, int y, int width, int height, double scale, int size, float partial, CustomVertexConsumers cvc) {
         ModSettings settings = modMain.getSettings();
         int mapSize = minimapSession.getMinimapProcessor().getMinimapSize();
         int shape = settings.minimapShape;
@@ -35,7 +35,7 @@ public abstract class MinimapRendererMixin {
             name = "offsetY",
             at = @At(value = "STORE")
     )
-    private int xaerofix$fixArrowOffset(int original) {
+    private int xaeroarrowfix$fixArrowOffset(int original) {
         return -10;
     }
 }
