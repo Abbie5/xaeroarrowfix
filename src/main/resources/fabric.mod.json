@@ -16,11 +16,7 @@
     "xaeroarrowfix.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.11",
-    "minecraft": ">=1.14.4"
-  },
-  "suggests": {
-    "xaerominimap": ">=20.15.2",
-    "xaerominimapfair": ">=20.15.2"
+    "fabricloader": ">=0.7.4",
+    "minecraft": "1.15.x"
   }
 }
