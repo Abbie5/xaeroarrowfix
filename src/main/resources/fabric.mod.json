@@ -4,10 +4,13 @@
   "version": "${version}",
   "name": "Xaero's Minimap Arrow Fix",
   "description": "Fix Xaero's Minimap still showing the main entity dot when using the arrow",
+  "icon": "assets/xaeroarrowfix/icon.png",
   "authors": [
     "Abbie"
   ],
   "contact": {
+    "homepage": "https://github.com/Abbie5/xaeroarrowfix",
+    "issues": "https://github.com/Abbie5/xaeroarrowfix/issues",
     "sources": "https://github.com/Abbie5/xaeroarrowfix"
   },
   "license": "MIT",
