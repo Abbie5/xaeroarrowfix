@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "cc.abbie.xaeroarrowfix.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "MinimapRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
