@@ -18,7 +18,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.0+1.18'
+version = '1.1+1.18'
 group = 'cc.abbie.xaeroarrowfix' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'xaeroarrowfix-forge'
 
