@@ -53,9 +53,3 @@ Fix Xaero's Minimap still showing the main entity dot when using the arrow.
     versionRange="[1.19.2,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.xaeroarrowfix]]
-    modId="xaerominimap"
-    mandatory=true
-    versionRange="[23.1.0,)"
-    ordering="NONE"
-    side="BOTH"
