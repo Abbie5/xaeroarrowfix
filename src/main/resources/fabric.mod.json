@@ -15,11 +15,16 @@
   },
   "license": "MIT",
   "environment": "client",
+  "entrypoints": {
+    "preLaunch": [
+      "cc.abbie.xaeroarrowfix.PreLaunch"
+    ]
+  },
   "mixins": [
     "xaeroarrowfix.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.8.7",
-    "minecraft": ">=1.16"
+    "fabricloader": ">=0.14",
+    "minecraft": ">=1.20"
   }
 }
