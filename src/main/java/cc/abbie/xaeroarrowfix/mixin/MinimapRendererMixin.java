@@ -1,33 +1,29 @@
 package cc.abbie.xaeroarrowfix.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import xaero.common.IXaeroMinimap;
-import xaero.common.XaeroMinimapSession;
-import xaero.common.graphics.CustomVertexConsumers;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xaero.common.minimap.MinimapProcessor;
-import xaero.common.minimap.render.MinimapRenderer;
+import xaero.common.minimap.radar.MinimapRadar;
+import xaero.common.minimap.render.MinimapFBORenderer;
 import xaero.common.settings.ModSettings;
 
-@Mixin(MinimapRenderer.class)
+@Mixin(MinimapFBORenderer.class)
 public abstract class MinimapRendererMixin {
-    @Shadow(remap = false)
-    protected IXaeroMinimap modMain;
-
-    @ModifyVariable(
+    @Inject(
             remap = false,
-            method = "renderMinimap",
-            name = "crosshairDisplayed",
-            at = @At(value = "LOAD", ordinal = 1)
+            method = "renderMainEntityDot",
+            at = @At("HEAD"),
+            cancellable = true
     )
-    private boolean xaeroarrowfix$fixMainEntityDot(boolean original, XaeroMinimapSession minimapSession, PoseStack matrixStack, MinimapProcessor minimap, int x, int y, int width, int height, double scale, int size, float partial, CustomVertexConsumers cvc) {
-        ModSettings settings = modMain.getSettings();
-        int mapSize = minimapSession.getMinimapProcessor().getMinimapSize();
-        int shape = settings.minimapShape;
-
-        return original || settings.mainEntityAs == 2 || settings.getLockNorth(mapSize / 2, shape);
+    private void xaeroarrowfix$fixMainEntityDot(GuiGraphics guiGraphics, MinimapProcessor minimap, Player p, Entity renderEntity, double ps, double pc, double playerX, double playerZ, float partial, MinimapRadar minimapRadar, boolean lockedNorth, int style, boolean smooth, boolean debug, boolean cave, double dotNameScale, ModSettings settings, MultiBufferSource.BufferSource renderTypeBuffers, float minimapScale, CallbackInfo ci) {
+        if (settings.mainEntityAs == 2 || lockedNorth) {
+            ci.cancel();
+        }
     }
 }

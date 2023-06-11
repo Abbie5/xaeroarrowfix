@@ -1,23 +1,17 @@
-buildscript {
-    repositories {
-        maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
-    }
-    dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
-}
-
 plugins {
     id 'eclipse'
+    id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-apply plugin: 'org.spongepowered.mixin'
+version = "${mod_version}+${minecraft_version}"
+group = mod_group_id
 
-version = '1.1+1.19'
-group = 'cc.abbie.xaeroarrowfix' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'xaeroarrowfix-forge'
+base {
+    archivesName = "${mod_id}-forge"
+}
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -37,7 +31,20 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: mapping_channel, version: mapping_version
+
+    // When true, this property will have all Eclipse run configurations run the "prepareX" task for the given run configuration before launching the game.
+    // In most cases, it is not necessary to enable.
+    // enableEclipsePrepareRuns = true
+
+    // When true, this property will have all IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
+    // In most cases, it is not necessary to enable.
+    // enableIdeaPrepareRuns = true
+
+    // This property allows configuring Gradle's ProcessResources task(s) to run on IDE output locations before launching the game.
+    // It is REQUIRED to be set to true for this template to function.
+    // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
+    copyIdeResources = true
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
 
@@ -60,10 +67,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'xaeroarrowfix'
+            property 'forge.enabledGameTestNamespaces', mod_id
 
             mods {
-                xaeroarrowfix {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -76,10 +83,10 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            property 'forge.enabledGameTestNamespaces', 'xaeroarrowfix'
+            property 'forge.enabledGameTestNamespaces', mod_id
 
             mods {
-                xaeroarrowfix {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -95,10 +102,10 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            property 'forge.enabledGameTestNamespaces', 'xaeroarrowfix'
+            property 'forge.enabledGameTestNamespaces', mod_id
 
             mods {
-                xaeroarrowfix {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -112,10 +119,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'xaeroarrowfix', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                xaeroarrowfix {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -134,14 +141,14 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
-    maven { url 'https://cursemaven.com' }
+    maven { url 'https://api.modrinth.com/maven' }
 }
 
 dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -154,8 +161,7 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    implementation fg.deobf('curse.maven:xaeros-minimap-263420:4381124')
-
+    implementation fg.deobf("maven.modrinth:xaeros-minimap:${xaeros_minimap_version}")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
@@ -164,16 +170,37 @@ mixin {
     config "xaeroarrowfix.mixins.json"
 }
 
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
+// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def replaceProperties = [
+        minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+        forge_version: forge_version, forge_version_range: forge_version_range,
+        loader_version_range: loader_version_range,
+        mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+        mod_authors: mod_authors, mod_description: mod_description
+]
+processResources {
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
+    }
+}
+
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "xaeroarrowfix",
-                "Specification-Vendor"    : "Abbie",
-                "Specification-Version"   : "1.0",
+                "Specification-Title"     : mod_id,
+                "Specification-Vendor"    : mod_authors,
+                "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "Abbie",
+                "Implementation-Vendor"   : mod_authors,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
