@@ -4,7 +4,7 @@
   "package": "cc.abbie.xaeroarrowfix.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "MinimapRendererMixin"
+    "MinimapFBORendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
